@@ -1,9 +1,9 @@
-name:                vector-fixed
+name:                n-vector
 version:             0.1.0.0
 synopsis:            Fixed-size vectors using type-level naturals
 description:         Fixed-size vectors using type-level naturals
-homepage:            https://github.com/nickspinale/vector-fixed
-bug-reports:         https://github.com/nickspinale/vector-fixed/issues
+homepage:            https://github.com/nickspinale/n-vector
+bug-reports:         https://github.com/nickspinale/n-vector/issues
 stability:           provisional
 license:             MIT
 license-file:        LICENSE

@@ -57,66 +57,9 @@ import Data.Type.Equality
 import GHC.TypeLits
 import Text.Printf
 
--- | Type representing a sequence of @n@ bits, or a non-negative integer smaller than @2^n@.
+-- | Type representing a vector of length n
 newtype V (n :: Nat) a = V { getV :: Vector a }
     deriving (Eq, PrintfArg, Data, Typeable)
-
--- Original name was BigWord, but since using this module requires more
--- explicit type signatures, I decided to use just W. This may be stupid.
--- Sorry if the name conflicts with your code.
-
--------------------------------
--- INSTANCES
--------------------------------
-
-instance KnownNat n => Read (W n) where
-    readsPrec = ((.).(.)) (map $ \(a, str) -> (fromInteger a, str)) readsPrec
-
-instance Show (W n) where
-    show = show . getW
-
-instance KnownNat n => Bounded (W n) where
-    minBound = 0
-    maxBound = W (bit (natValInt (Proxy :: Proxy n)) - 1)
-
--- Can't just derive because it need to get the default for bounded types
-instance KnownNat n => Enum (W n) where
-    toEnum = W . toEnum
-    fromEnum = fromEnum . getW
-
-instance KnownNat n => Integral (W n) where
-    toInteger = getW
-    quotRem x y = case (quotRem `on` getW) x y of (q, r) -> (W q, W r)
-
-instance KnownNat n => Num (W n) where
-    fromInteger = W . flip mod (bit (natValInt (Proxy :: Proxy n)))
-    (+) = ((.).(.)) fromInteger ((+) `on` getW)
-    (*) = ((.).(.)) fromInteger ((*) `on` getW)
-    abs = id
-    signum 0 = 0
-    signum _ = 1
-    negate = (+ 1) . complement
-
-instance KnownNat n => Bits (W n) where
-        (.&.) = ((.).(.)) W ((.&.) `on` getW)
-        (.|.) = ((.).(.)) W ((.|.) `on` getW)
-        xor   = ((.).(.)) W (xor   `on` getW)
-        complement = fromInteger . complement . getW
-        shift (W x) i = W $ shift x i `mod` bit (natValInt (Proxy :: Proxy n))
-        rotate x i = let nat = natValInt (Proxy :: Proxy n)
-                         dist = mod i nat
-                     in shift x dist .|. shift x (nat - dist)
-        bitSizeMaybe = Just . finiteBitSize
-        bitSize = finiteBitSize
-        isSigned = const False
-        testBit = testBit . getW
-        bit i = if i < natValInt (Proxy :: Proxy n)
-                then W (bit i)
-                else 0
-        popCount = popCount . getW
-
-instance KnownNat n => FiniteBits (W n) where
-    finiteBitSize = const $ natValInt (Proxy :: Proxy n)
 
 -------------------------------
 -- OPERATIONS
