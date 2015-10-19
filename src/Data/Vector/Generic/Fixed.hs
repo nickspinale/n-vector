@@ -4,11 +4,19 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies        #-}
 {-# LANGUAGE TypeOperators       #-}
+{-# LANGUAGE NoImplicitPrelude   #-}
 
 module Data.Vector.Generic.Fixed
-    (
+    ( toFixed
+    , fromFixed
+    , (!)
+    , slice
+    , empty
+    , singleton
+    , replicate
     ) where
 
+import           Prelude hiding (replicate)
 import qualified Data.Vector.Generic as G
 import           GHC.Exts
 import           GHC.TypeLits
