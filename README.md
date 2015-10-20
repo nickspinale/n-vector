@@ -18,7 +18,7 @@ slice :: ( KnownNat start
          ) => Proxy# start -> Proxy# length -> V total v a -> V length v a
 ```
 
-The latter's type signature looks a bit hairy, but the type safety is sometimes worth it.
+The latter's type signature looks a bit scary, but the type safety is sometimes worth it.
 What's more, not only is the `newtype` wrapper `V` free, but `Proxy#`'s are as well (unlike `Int`'s...).
 
 It is worth noting that some functions from `vector`, such as `filter`, have no direct analog in the fixed-length world.
